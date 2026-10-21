@@ -62,7 +62,7 @@ Files: `tests/ui/catalogue.spec.ts`, `tests/api/catalogue.spec.ts` and
 - [x] Run clean `npm ci`, `npm run verify`, then external smoke and report generation.
 - [x] Review source, dependency tree, ignored artifacts and tracked-file diff.
 - [x] Replace provisional status in memory/README with exact evidence and next scope.
-- [ ] Commit foundation and push only this new repository's `main` branch.
-- [ ] Confirm public GitHub repository and matching remote commit; move local repository
+- [x] Commit foundation and push only this new repository's `main` branch.
+- [x] Confirm public GitHub repository and matching remote commit; move local repository
       to `/Users/admin/AquaProjects/sdet-automation-patterns-lab` without overwriting a path.
-- [ ] Recheck final Git state and the unchanged LockThreat checkout, then stop.
+- [x] Recheck final Git state and the unchanged LockThreat checkout, then stop.

@@ -4,12 +4,13 @@ Updated: 2026-10-21 (America/Edmonton).
 
 ## Current phase
 
-Phase 0 — COMPLETED. Phase 1 — IN_PROGRESS: implementation verified; final publication
-and checkpoint pending. This execution stops after Phases 0–1.
+Phase 0 — COMPLETED. Phase 1 — COMPLETED. First verified milestone delivered;
+execution stopped at the requested boundary. Phases 2–8 are NOT_STARTED.
 
 ## Completed work
 
-- Public repository created; planning commit `7797428` pushed:
+- Public repository confirmed public. Planning commit `7797428` and verified
+  foundation commit `c19ad78` pushed to `main`:
   https://github.com/Kunonuk/sdet-automation-patterns-lab.
 - Toolshop v5 UI, OpenAPI, catalogue/search/categories and anonymous profile behavior
   researched; upstream license reviewed. Original automation only, no accounts created.
@@ -22,17 +23,20 @@ and checkpoint pending. This execution stops after Phases 0–1.
   Per-run cleanup removes discovery leftovers; report contains four executed passes.
 - Independent read-only review found no critical/important defects. Its empty query/
   fragment delimiter finding was reproduced (4 failures, 18 passes) and fixed (22 passes).
-- Original LockThreat checkout began clean on `LGH-5031`; no changes intended there.
+- Permanent independent checkout: `/Users/admin/AquaProjects/sdet-automation-patterns-lab`.
+- Final LockThreat verification: clean `LGH-5031`; unstaged and staged diffs empty.
+- Final local source commit matches the GitHub main commit; checkpoint-only changes
+  follow it in Git history.
 
 ## Last successful verification
 
-| Command / inspection                                            | Observed result                                                                        |
-| --------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| `npm ci --cache /private/tmp/sdet-npm-cache --no-fund`          | Clean locked install; 521 packages added, 522 audited.                                 |
-| `npm run verify`                                                | Typecheck, zero-warning lint, format and 22 Jest tests passed.                         |
-| `env -u PWDEBUG -u HEADED -u FORCE_COLOR npm run test:external` | 4 passed: 3 API, 1 UI; 0 failed/skipped/flaky/retries; one worker; 7.7s.               |
-| `npm run report:allure`                                         | Static report generated; statistic exactly `total: 4, passed: 4`.                      |
-| Disposable local headless report probe                          | Dashboard rendered 100%, total 4, passed 4; zero page exceptions; screenshot reviewed. |
+| Command / inspection                                   | Observed result                                                                        |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
+| `npm ci --cache /private/tmp/sdet-npm-cache --no-fund` | Clean locked install; 521 packages added, 522 audited.                                 |
+| `npm run verify`                                       | Typecheck, zero-warning lint, format and 22 Jest tests passed.                         |
+| `env -u PWDEBUG -u HEADED npm run test:external`       | 4 passed: 3 API, 1 UI; 0 failed/skipped/flaky/retries; one worker; 8.3s.               |
+| `npm run report:allure`                                | Static report generated; statistic exactly `total: 4, passed: 4`.                      |
+| Disposable local headless report probe                 | Dashboard rendered 100%, total 4, passed 4; zero page exceptions; screenshot reviewed. |
 
 Ignored artifacts: `test-results/results.json`, `test-results/allure-preview.png`,
 `playwright-report/index.html`, `allure-results/`, `allure-report/index.html`.
@@ -63,10 +67,7 @@ The disposable probe is validation evidence, not part of the tracked test suite.
 
 ## Remaining work and next action
 
-Commit/push the verified foundation, move the independent repository to
-`/Users/admin/AquaProjects/sdet-automation-patterns-lab`, verify matching remote commit
-and unchanged LockThreat checkout, then update the published checkpoint and stop.
-Phase 2 is next: extract focused catalogue/detail pages, reusable components and typed
+No work remains in the first-execution scope. Phase 2 is next: extract focused catalogue/detail pages, reusable components and typed
 fixtures from the working flow. Do not implement all remaining phases together.
 
 On continuation, read this file, ROADMAP, ARCHITECTURE, DECISIONS, PATTERNS and
