@@ -2,12 +2,12 @@
 
 ## Risk and runner ownership
 
-| Layer | Current target | Responsibility | Gate |
-| --- | --- | --- | --- |
-| Jest | Configuration loader | Defaults, URL normalization, deployment prefixes, invalid settings, no secret leakage | Deterministic; no network/browser |
-| Playwright API | Real public Toolshop | Catalogue response and current-ID detail; search relevance; anonymous `/users/me` rejection | Explicit external smoke |
-| Playwright UI | Real public Toolshop | Shopper searches for pliers and opens a matching product | Explicit external smoke; headless Chromium |
-| Cucumber | Deferred to Phase 5 | Cart business workflow using existing pages/actions | Not installed or executed yet |
+| Layer          | Current target       | Responsibility                                                                              | Gate                                       |
+| -------------- | -------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------ |
+| Jest           | Configuration loader | Defaults, URL normalization, deployment prefixes, invalid settings, no secret leakage       | Deterministic; no network/browser          |
+| Playwright API | Real public Toolshop | Catalogue response and current-ID detail; search relevance; anonymous `/users/me` rejection | Explicit external smoke                    |
+| Playwright UI  | Real public Toolshop | Shopper searches for pliers and opens a matching product                                    | Explicit external smoke; headless Chromium |
+| Cucumber       | Deferred to Phase 5  | Cart business workflow using existing pages/actions                                         | Not installed or executed yet              |
 
 The pyramid begins with cheap isolated framework tests. A small number of API and UI
 smokes provide integration evidence. Phase 3 supplies an owned local catalogue API

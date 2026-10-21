@@ -3,9 +3,9 @@
 Only implemented concepts belong in the first table. Future patterns are not implied
 by directory names or installed dependencies.
 
-| Concept | Problem and location | Practical example | Advantages | Trade-offs / when not to use |
-| --- | --- | --- | --- | --- |
-| Explicit dependency injection (planned for foundation) | Hidden environment state; `src/core/config/environment.ts` | Tests pass a literal environment map to `loadEnvironment` | Deterministic validation without changing global environment | A function parameter is enough; do not add a DI container for two settings. |
+| Concept                       | Problem and location                                       | Practical example                                                            | Advantages                                                   | Trade-offs / when not to use                                                |
+| ----------------------------- | ---------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------ | --------------------------------------------------------------------------- |
+| Explicit dependency injection | Hidden environment state; `src/core/config/environment.ts` | `loadEnvironment` accepts an environment map; Jest tests independent callers | Deterministic validation without changing global environment | A function parameter is enough; do not add a DI container for two settings. |
 
 ## Planned, not yet implemented
 
