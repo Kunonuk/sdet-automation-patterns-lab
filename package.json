@@ -1,0 +1,40 @@
+{
+  "name": "sdet-automation-patterns-lab",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A practical TypeScript automation framework demonstrating SDET design patterns, BDD, data-driven testing, API/UI automation, SOLID principles, and CI/CD best practices.",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=24 <25",
+    "npm": ">=11 <12"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm run test:unit",
+    "pretest:unit": "node -e \"require('node:fs').rmSync('.build/unit', { recursive: true, force: true })\"",
+    "test:unit": "tsc --project tsconfig.unit.json && jest --config jest.config.cjs",
+    "pretest:external": "node -e \"require('node:fs').rmSync('allure-results', { recursive: true, force: true })\"",
+    "test:external": "node --env-file-if-exists=.env ./node_modules/@playwright/test/cli.js test",
+    "test:ui": "npm run test:external -- --project=ui-chromium",
+    "test:api": "npm run test:external -- --project=api",
+    "verify": "npm run typecheck && npm run lint && npm run format:check && npm test",
+    "report:allure": "allure generate allure-results --output allure-report --clean",
+    "report:html": "playwright show-report"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@jest/globals": "30.5.2",
+    "@playwright/test": "1.64.1",
+    "@types/node": "24.19.2",
+    "allure": "3.21.0",
+    "allure-playwright": "3.14.0",
+    "eslint": "10.13.0",
+    "jest": "30.5.2",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.0"
+  }
+}
