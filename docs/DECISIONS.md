@@ -48,3 +48,18 @@ Accepted. Use `allure-playwright` results and the `allure` 3 CLI to generate a s
 report. Reject the Java-based Allure 2 command line: Java is absent on this machine
 and a global Java installation is unnecessary. Playwright HTML is a second convenient
 local viewer. Report directories and failure attachments are ignored by Git.
+
+Post-verification refinement: Allure emitted skipped entries even for `--list`.
+Clear generated results before each external command and clean the report when
+generating it, so discovery and previous runs cannot pollute current results.
+Clear compiled Jest output before compilation so renamed/deleted TypeScript tests
+cannot survive as stale JavaScript.
+
+## ADR 007 — Feature branches and PR review
+
+Accepted after the user's explicit workflow correction. `main` retains the initial
+planning baseline through a history-preserving revert. The foundation is restored on
+`feat/foundation`, based on that revert, and proposed in a PR to `main`. Source, tests
+and dependency versions remain unchanged. Future authorized implementation commits
+belong on feature branches; direct-to-main publication requires an explicit exception.
+No force-push, history rewrite or automatic PR merge is part of this correction.
