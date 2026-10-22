@@ -1,51 +1,59 @@
-import { expect, test } from '@playwright/test';
+import { expect, test } from '../../src/core/fixtures/ui.fixture';
 
 test(
   'a shopper can search for pliers and open a matching product',
   { tag: ['@external', '@catalogue'] },
-  async ({ page }) => {
+  async ({ catalogue, product, page }) => {
     await test.step('Given a signed-out shopper is browsing the catalogue', async () => {
-      await page.goto('./');
-      await expect(page.getByTestId('nav-sign-in')).toBeVisible();
-      await expect(page.getByTestId('product-name').first()).toBeVisible();
+      await catalogue.open();
+      await expect(catalogue.navigation.signInLink).toBeVisible();
+      await expect(catalogue.productNames.first()).toBeVisible();
     });
 
     await test.step('When the shopper searches for pliers', async () => {
-      // The current UI uses the documented HTTP QUERY operation, not GET query parameters.
-      const searchResponse = page.waitForResponse(
-        (response) =>
-          new URL(response.url()).pathname.endsWith('/products/search') &&
-          response.request().method() === 'QUERY',
-      );
-      await page.getByTestId('search-query').fill('pliers');
-      await page.getByTestId('search-submit').click();
-      const response = await searchResponse;
+      const response = await catalogue.searchFor('pliers');
       expect(response.status()).toBe(200);
       const criteria: unknown = response.request().postDataJSON();
       expect(criteria).toEqual({ q: 'pliers' });
     });
 
     await test.step('Then matching results lead to the selected product detail', async () => {
-      const resultNames = page.getByTestId('product-name');
       await expect
         .poll(
           async () => {
-            const names = await resultNames.allTextContents();
+            const names = await catalogue.productNames.allTextContents();
             return names.length > 0 && names.every((name) => /pliers/i.test(name));
           },
           { message: 'Search must display nonempty results that all match pliers' },
         )
         .toBe(true);
 
-      const product = page.getByRole('link').filter({ has: resultNames }).first();
-      const selectedName = (await product.getByTestId('product-name').innerText()).trim();
-      const href = await product.getAttribute('href');
-      if (!href) throw new Error('Search result must link to its product detail');
-      const detailUrl = new URL(href, page.url()).href;
-
-      await product.click();
-      await expect(page).toHaveURL(detailUrl);
-      await expect(page.getByTestId('product-name')).toHaveText(selectedName);
+      const selected = await catalogue.firstProduct.open();
+      await expect(page).toHaveURL(selected.url);
+      await expect(product.name).toHaveText(selected.name);
     });
+  },
+);
+
+test(
+  'clearing an empty search restores the browsable catalogue',
+  { tag: ['@external', '@catalogue', '@negative'] },
+  async ({ catalogue }) => {
+    await catalogue.open();
+    await expect(catalogue.productNames.first()).toBeVisible();
+
+    const query = 'sdet-architecture-no-match-7c4e';
+    const searchResponse = await catalogue.searchFor(query);
+    expect(searchResponse.status()).toBe(200);
+    await expect(catalogue.searchTerm).toHaveText(query);
+    await expect(catalogue.emptyResults).toHaveText('There are no products found.');
+    await expect(catalogue.productNames).toHaveCount(0);
+
+    const resetResponse = await catalogue.clearSearch();
+    expect(resetResponse.status()).toBe(200);
+    await expect(catalogue.search.queryInput).toHaveValue('');
+    await expect(catalogue.searchTerm).toBeHidden();
+    await expect(catalogue.emptyResults).toBeHidden();
+    await expect(catalogue.productNames.first()).toBeVisible();
   },
 );

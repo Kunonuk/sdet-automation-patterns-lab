@@ -2,83 +2,74 @@
 
 Updated: 2026-10-21 (America/Edmonton).
 
-## Current phase
+## Current phase and Git state
 
-Phase 0 — COMPLETED. Phase 1 — COMPLETED (implementation and verification).
-The foundation is proposed on `feat/foundation` in [PR #1](https://github.com/Kunonuk/sdet-automation-patterns-lab/pull/1); it is open and not merged.
-Phases 2–8 are NOT_STARTED.
+**Phase 2 — COMPLETED.** Stop here; Phases 3–8 are NOT_STARTED.
+Working branch: `feat/phase-2-ui-architecture`, based on merged foundation `075026d`.
+[Foundation PR #1](https://github.com/Kunonuk/sdet-automation-patterns-lab/pull/1) is
+merged. Phase 2 changes are committed/pushed only on their feature branch; no merge
+or new PR creation is authorized by this implementation request. See
+[branch comparison](https://github.com/Kunonuk/sdet-automation-patterns-lab/compare/main...feat/phase-2-ui-architecture).
+Use `git log -1` and the remote branch to identify the exact published checkpoint.
 
 ## Completed work
 
-- Public repository confirmed public. Initial planning commit `7797428` is the
-  baseline on `main`; foundation implementation is restored on `feat/foundation`:
-  https://github.com/Kunonuk/sdet-automation-patterns-lab.
-- Toolshop v5 UI, OpenAPI, catalogue/search/categories and anonymous profile behavior
-  researched; upstream license reviewed. Original automation only, no accounts created.
-- Exact compatible npm dependencies and lockfile, strict TypeScript, Playwright UI/API
-  projects, compiled Jest unit tests, ESLint, Prettier and native `.env` loading.
-- Pure injected configuration with 22 meaningful unit cases; independent callers,
-  defaults, path prefixes, malformed/credential-bearing URLs and secret-safe errors.
-- Three real API scenarios and one real headless UI search/detail workflow passed.
-- HTML/JSON/Allure reporting; generated Allure dashboard visually inspected headlessly.
-  Per-run cleanup removes discovery leftovers; report contains four executed passes.
-- Independent read-only review found no critical/important defects. Its empty query/
-  fragment delimiter finding was reproduced (4 failures, 18 passes) and fixed (22 passes).
-- Permanent independent checkout: `/Users/admin/AquaProjects/sdet-automation-patterns-lab`.
-- Final LockThreat verification: clean `LGH-5031`; unstaged and staged diffs empty.
-- User requested correcting the direct-to-main publication. Revert `cdc9d5f`
-  restores the planning-only tree on `main` without rewriting history. The feature
-  branch descends from this revert and restores the foundation for a meaningful PR.
-- Implementation/config/test files are byte-identical to the previously verified
-  milestone `1e26b89`; only branch-workflow instructions and checkpoint text change.
+- Preserved all Phase 1 API scenarios, strict configuration, dependency versions,
+  runner boundaries, reporting and headless one-worker/zero-retry policy.
+- Added CataloguePage and ProductPage using composition rather than inheritance.
+- Added SearchComponent, scoped ProductCardComponent and shared NavigationComponent.
+- Added lazy typed navigation/catalogue/product fixtures. Native Page/context fixtures
+  own lifecycle; pages/components have no test runner, expect or fixture imports.
+- Refactored the original search/detail workflow; added meaningful empty-search/reset
+  and detail/Home scenarios. Assertions and result polling remain in specs.
+- Documented the fixture graph as practical Page Factory construction; rejected a
+  separate registry, service container and Selenium-style decorators.
+- Independent read-only source review reported no Critical, Important or Minor findings.
+- Phase 2 plan and persistent architecture/pattern/decision/strategy/README docs updated.
 
-## Last successful verification
+## Verification evidence
 
-`npm run verify` is rerun for the PR migration. The external smoke and report results
-below are from the earlier verified milestone; they are not new browser executions.
-No source, test or dependency changes were made during the Git workflow correction.
+| Command / step                                                                                      | Result                                                                                                                                                                  |
+| --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Baseline `npm run verify`                                                                           | Types, lint, formatting and 22 Jest tests passed.                                                                                                                       |
+| Baseline `env -u PWDEBUG -u HEADED npm run test:external`                                           | Original 4 scenarios passed (3 API, 1 UI).                                                                                                                              |
+| Expected red `env -u PWDEBUG -u HEADED npm run test:ui -- --grep 'a shopper can search for pliers'` | 1 expected failure: Catalogue navigation not implemented. Screenshot, error context and trace emitted.                                                                  |
+| First full refactored suite                                                                         | 5 passed, 1 failed: empty-state locator incorrectly selected the persistent results container. Investigated with failure DOM snapshot; fixed the locator, not the test. |
+| Final `npm run verify`                                                                              | Typecheck, zero-warning lint, formatting and 22 Jest tests passed.                                                                                                      |
+| Final `env -u PWDEBUG -u HEADED npm run test:external`                                              | 6 passed (3 API, 3 UI), 0 failed/skipped/flaky/retries, one worker; 13.1s.                                                                                              |
+| `npm run report:allure` and JSON inspection                                                         | Report generated; exactly 6 Allure passed executions; no stale discovery/failure entries.                                                                               |
+| `npm audit --json --cache /private/tmp/sdet-npm-cache`                                              | Exit 1: 19 known moderate findings, 0 high/critical; no dependency changes.                                                                                             |
+| Source architecture review                                                                          | No material findings; no inheritance, singleton pages, hidden assertions or dependency changes.                                                                         |
 
-| Command / inspection                                   | Observed result                                                                        |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `npm ci --cache /private/tmp/sdet-npm-cache --no-fund` | Clean locked install; 521 packages added, 522 audited.                                 |
-| `npm run verify`                                       | Typecheck, zero-warning lint, format and 22 Jest tests passed.                         |
-| `env -u PWDEBUG -u HEADED npm run test:external`       | 4 passed: 3 API, 1 UI; 0 failed/skipped/flaky/retries; one worker; 8.3s.               |
-| `npm run report:allure`                                | Static report generated; statistic exactly `total: 4, passed: 4`.                      |
-| Disposable local headless report probe                 | Dashboard rendered 100%, total 4, passed 4; zero page exceptions; screenshot reviewed. |
+Expected-red and corrected-failure artifacts were preserved outside the repository at
+`/private/tmp/sdet-phase2-red-evidence/` and `/private/tmp/sdet-phase2-reset-evidence/`.
+Both include failure screenshots and traces referenced in Allure step attachments.
+Final ignored artifacts: `test-results/results.json`, `playwright-report/index.html`,
+`allure-results/`, `allure-report/index.html`. No new clean installation was required:
+manifests and lockfile are unchanged. Broader parallel verification is not claimed.
 
-Ignored artifacts: `test-results/results.json`, `test-results/allure-preview.png`,
-`playwright-report/index.html`, `allure-results/`, `allure-report/index.html`.
-The disposable probe is validation evidence, not part of the tracked test suite.
+## Known issues / limitations
 
-## Known failures / environment observations
+- Phase 2 audit reconfirmed 19 moderate entries from one Jest transitive
+  `sprintf-js` advisory, zero high/critical; no dependency changes in Phase 2.
+  See `DEPENDENCIES.md`; do not force an incompatible Jest downgrade.
+- Allure 3.21.0's dashboard requested an optional missing `widgets/metrics.json` in
+  prior visual inspection; it still rendered with zero page exceptions. Phase 2
+  verified generated result counts, not a new browser visual QA of the report.
+- The public catalogue and transport are externally mutable. Search smoke expects
+  names containing pliers; the owned improbable no-match phrase is not a guarantee
+  against an independently changed public dataset. Only headless Chromium is covered.
+- Missing optional `.env` and inherited NO_COLOR/FORCE_COLOR emit informational
+  messages. This environment requires network-enabled execution for external tests.
+- No open source/test defect remains from Phase 2. CI, API services, data factories,
+  Cucumber and parallel reliability remain outside this phase.
 
-- Sandboxed shell DNS cannot reach external hosts. Network-enabled execution works;
-  the initial authentication error disappeared without changing credentials.
-- Initial SSH push was denied to an unrelated `dmytro-cl` identity; the existing
-  `Kunonuk` HTTPS credential helper pushed successfully. No global auth/Git changes.
-  Commits use the authenticated account's public noreply address.
-- `npm audit`: 19 moderate findings from one Jest transitive `sprintf-js` advisory;
-  zero high/critical. Deprecated transitive glob notice remains. See DEPENDENCIES.
-- Initial UI inspection timed out waiting for GET parameters. Instrumentation showed
-  QUERY with a JSON body; the final scenario observes that operation and passes.
-- Discovery left four skipped Allure entries. Per-run cleanup resolved this;
-  the regenerated report has exactly four passed executions.
-- First visual report probe looked for a name inside a collapsed suite and timed out;
-  the corrected dashboard probe passed. Allure 3.21.0 requests optional
-  `widgets/metrics.json` although it was not emitted, producing a 404 console message.
-  Rendering succeeds with zero page exceptions. No dependency was patched.
-- Missing optional `.env` and inherited NO_COLOR/FORCE_COLOR produce informational
-  Playwright messages. No effect on results. Java is absent; Allure 3 does not need it.
-- Failure-only screenshot/trace configuration exists; deliberate fault-injection
-  verification remains deferred. CI, Cucumber, additional browsers and later patterns
-  have not been executed or implemented.
+## Next action
 
-## Remaining work and next action
+Review the pushed Phase 2 branch. Open/merge a PR only on explicit instruction.
+When Phase 3 is requested, read ROADMAP, ARCHITECTURE, PATTERNS, DECISIONS and
+TEST_STRATEGY, inspect actual Git/code state, then implement its next incomplete task.
+Do not start Phase 3 automatically or recreate the UI abstractions.
 
-Review the foundation PR and merge only with explicit user authorization. Continue
-work on feature branches rather than publishing implementation directly to `main`.
-Phase 2 follows the accepted foundation: extract focused catalogue/detail pages,
-reusable components and typed fixtures. Do not implement all phases together.
-
-On continuation, read this file, ROADMAP, ARCHITECTURE, DECISIONS, PATTERNS and
-TEST_STRATEGY, then inspect actual code/Git/test state. Resume; do not recreate work.
+Local project: `/Users/admin/AquaProjects/sdet-automation-patterns-lab`.
+The unrelated LockThreat repository is outside this task's scope.

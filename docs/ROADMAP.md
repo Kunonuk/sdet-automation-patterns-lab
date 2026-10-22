@@ -8,7 +8,7 @@ read `PROGRESS.md`, inspect the code and Git state, and resume the next incomple
 | ------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | 0 — Research and planning | COMPLETED   | Verify Toolshop UI, OpenAPI, license and stable package compatibility; evaluate architecture; create public repository; write persistent memory.                                                        | Public HTTP and GitHub access | Research links and observed contracts recorded; repository confirmed public by GitHub; roadmap, architecture, decisions, strategy and checkpoint exist.                                            |
 | 1 — Foundation            | COMPLETED   | Strict TypeScript; Playwright/Jest; ESLint/Prettier; validated environment configuration; Allure/HTML diagnostics; meaningful UI/API/unit tests; reproducible npm lockfile.                             | Phase 0                       | Clean installation; typecheck, lint, formatting and Jest pass; real headless UI and API smoke tests pass; Allure report generated; verification recorded; milestone committed and pushed.          |
-| 2 — UI architecture       | NOT_STARTED | Extract catalogue/detail page objects; reusable search/navigation components; typed Playwright fixtures; lazy page factory/composition; document SOLID and trade-offs.                                  | Phase 1                       | Existing real workflows pass after refactoring; fresh contexts per test; no static mutable pages, generic base-page layer or Selenium decorator port.                                              |
+| 2 — UI architecture       | COMPLETED   | Extract catalogue/detail page objects; reusable search/navigation components; typed Playwright fixtures; lazy page factory/composition; document SOLID and trade-offs.                                  | Phase 1                       | Existing real workflows pass after refactoring; fresh contexts per test; no static mutable pages, generic base-page layer or Selenium decorator port.                                              |
 | 3 — API and test data     | NOT_STARTED | Typed service/client layer; runtime response validation; shared product models; factory and builder with invariants; owned minimal local catalogue API; positive/negative contracts and scoped cleanup. | Phases 1–2                    | Jest validates factory/builder boundaries; local API gate is deterministic and works offline after install; hosted smoke uses live-discovered IDs and remains separate. No copied Toolshop source. |
 | 4 — DDT and KDT           | NOT_STARTED | Parameterized search/filter scenarios; external datasets when they improve clarity; small typed keyword interpreter reusing business actions; compare approaches.                                       | Phases 2–3                    | Each dataset row is independently reported; unknown keywords fail clearly; keyword actions use the existing components rather than duplicate them.                                                 |
 | 5 — BDD                   | NOT_STARTED | Install compatible Cucumber.js and Allure adapter; one useful Gherkin cart business workflow; independent runner, world and hooks; share runner-neutral page/actions.                                   | Phases 2–3                    | Cucumber runs headlessly; cleanup closes contexts on failure; failure attachments appear in Allure; no duplicated Playwright scenarios or competing runner ownership.                              |
@@ -28,3 +28,15 @@ read `PROGRESS.md`, inspect the code and Git state, and resume the next incomple
 - [x] Update memory, commit and push; verify remote commit and visibility.
 
 No empty architectural directories or unused framework dependencies should be added.
+
+## Phase 2 delivered checklist
+
+- [x] Baseline existing UI/API and Jest/static verification.
+- [x] Composed CataloguePage/ProductPage and reusable search/card/navigation objects.
+- [x] Lazy typed test-scoped fixture construction and shared navigation injection.
+- [x] Refactor original UI flow; add empty-search/reset and detail/Home coverage.
+- [x] Correct empty-state locator from observed integration failure; full suite green.
+- [x] Document POM/Page Factory trade-offs and independent review with no findings.
+- [x] Update project memory, verify, commit and push only the Phase 2 feature branch.
+
+Phase 3 remains NOT_STARTED and requires a new user request.

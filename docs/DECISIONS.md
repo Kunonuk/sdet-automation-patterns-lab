@@ -63,3 +63,31 @@ planning baseline through a history-preserving revert. The foundation is restore
 and dependency versions remain unchanged. Future authorized implementation commits
 belong on feature branches; direct-to-main publication requires an explicit exception.
 No force-push, history rewrite or automatic PR merge is part of this correction.
+
+## ADR 008 — Composed pages with lazy typed fixture construction (2026-10-21)
+
+Accepted for Phase 2. Add CataloguePage and ProductPage, compose focused search/card/
+navigation components, and inject Page/navigation with typed test-scoped fixtures.
+The same navigation dependency serves both pages in a scenario. POM owns operations
+and exposes Locators; tests own expectations, response checks and rendered-state polls.
+Only Playwright type imports are allowed in page/component modules.
+
+Reject a base-page hierarchy, interface per class, DI container and separate cached
+Page Factory registry. The fixture graph already supplies lazy construction, scope
+and teardown; native Locators already resolve elements on use. Preserve direct
+constructors so future Cucumber consumers can supply their own context lifecycle.
+Do not install Cucumber or implement the API/data abstractions scheduled for Phase 3.
+
+Search/reset use observed HTTP QUERY responses registered before the form action.
+Keep transport coordination in CataloguePage and return native Responses to the test;
+SearchComponent owns only controls. Rejected: arbitrary waits, status assertions
+hidden inside methods, and replacing live workflows with intercepted responses.
+Cost: a future Toolshop transport change must update page coordination and specs.
+
+The first reset integration run showed `search_completed` stays visible as the result
+container. Scope the empty-state locator to its actual no-products message rather
+than treating the container as an empty state. The unchanged test then passed.
+
+PR #1 was merged before this phase; `feat/phase-2-ui-architecture` starts at merged
+main `075026d`. Commit/push only this feature branch. A new PR or merge still needs
+explicit user authorization; this request authorizes implementation, commit and push.

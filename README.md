@@ -10,11 +10,14 @@ patterns only when a working scenario needs them.
 
 ## Current milestone
 
-**Phases 0–1: foundation.** Strict TypeScript, Playwright UI/API projects, Jest unit
-tests, validated configuration, linting/formatting, HTML/JSON/Allure reporting and
-persistent project memory. The real smoke suite covers:
+**Phases 0–2: foundation and UI architecture.** Strict TypeScript, Playwright UI/API
+projects, Jest unit tests, validated configuration, composed page/component objects,
+lazy typed fixtures, linting/formatting, HTML/JSON/Allure reporting and persistent
+project memory. The real smoke suite covers:
 
 - A shopper searching for pliers and opening the selected product.
+- Clearing an empty search to restore the browsable catalogue.
+- Shared header navigation from product detail back to the catalogue.
 - Catalogue listing followed by a current-ID detail read with consistent name/price.
 - Nonempty search results matching the requested product name.
 - Rejection of anonymous account-profile access.
@@ -22,9 +25,8 @@ persistent project memory. The real smoke suite covers:
 The deterministic suite validates configuration defaults, deployment URL prefixes,
 caller isolation, invalid URL settings and secret-safe error messages.
 
-**Planned, not implemented:** page/component objects, page factories, typed fixtures,
-API services, data factories/builders, DDT/KDT, Cucumber business scenarios, controlled
-local API, parallel reliability checks and GitHub Actions. See the
+**Planned, not implemented:** API services, data factories/builders, DDT/KDT, Cucumber
+business scenarios, controlled local API, parallel reliability checks and GitHub Actions. See the
 [phased roadmap](docs/ROADMAP.md) and [current checkpoint](docs/PROGRESS.md).
 
 ## Install
@@ -50,9 +52,9 @@ browser system libraries are absent. Dependencies are pinned and locked. TypeScr
 ```bash
 npm run verify          # deterministic: types, lint, format and Jest
 npm test                # Jest only; never contacts Toolshop
-npm run test:external   # all four real Toolshop scenarios
+npm run test:external   # all six real Toolshop scenarios
 npm run test:api        # only the three API scenarios
-npm run test:ui         # only the Chromium shopper scenario
+npm run test:ui         # only the three Chromium UI scenarios
 npm run typecheck
 npm run lint
 npm run format:check
@@ -79,7 +81,10 @@ test environment with a compatible Toolshop UI/API contract.
 ```mermaid
 flowchart LR
     Unit[Jest unit tests] --> Config[Pure validated configuration]
-    UI[Playwright UI] --> Browser[Fresh Chromium context]
+    UI[Playwright UI specs] --> Fixtures[Typed lazy fixtures]
+    Fixtures --> Pages[Catalogue / Product pages]
+    Pages --> Components[Search / Product card / Navigation]
+    Components --> Browser[Fresh Chromium context]
     Browser --> Toolshop[Hosted Toolshop UI]
     API[Playwright API] --> HTTP[Fresh request context]
     HTTP --> Service[Hosted Toolshop API]
@@ -90,7 +95,26 @@ flowchart LR
 Jest runs emitted JavaScript from strict TypeScript after cleaning its generated
 directory; it needs no Babel, ts-jest or ts-node configuration. Playwright alone owns
 UI/API scenarios and resource lifecycles. Future Cucumber workflows will have their
-own runner and reuse runner-neutral abstractions. See
+own runner and reuse runner-neutral abstractions.
+
+CataloguePage and ProductPage compose focused widgets rather than inheriting from a
+base page. Typed test-scoped fixtures inject the Page and shared navigation component;
+this lazy construction graph demonstrates practical Page Factory concepts without a
+separate registry. Specs own assertions and expose their business expectations:
+
+```typescript
+import { expect, test } from '../../src/core/fixtures/ui.fixture';
+
+test('a selected card opens its own product detail', async ({ catalogue, product, page }) => {
+  await catalogue.open();
+  const selected = await catalogue.firstProduct.open();
+  await expect(page).toHaveURL(selected.url);
+  await expect(product.name).toHaveText(selected.name);
+});
+```
+
+Page/component modules use Playwright types only and remain independent of runner
+hooks. See
 [architecture](docs/ARCHITECTURE.md), [decisions](docs/DECISIONS.md),
 [patterns](docs/PATTERNS.md) and [test strategy](docs/TEST_STRATEGY.md).
 
@@ -105,8 +129,9 @@ npm run report:html
 Playwright writes `test-results/results.json` and `playwright-report/index.html`;
 Allure writes `allure-results/` and `allure-report/index.html`. Allure includes
 scenario tags, business steps and request/assertion details. Playwright configures
-failure-only screenshots and retained failure traces. Automatic failure attachment
-configuration has not yet been validated with a deliberate fault-injection run.
+failure-only screenshots and retained failure traces. Phase 2 observed these
+attachments in the expected red test and corrected locator failure; the final clean
+report contains only the six passing executions.
 
 Each external command clears previous Allure results; report generation cleans the
 previous generated report. Use `test:external` to report UI and API together. All
@@ -121,7 +146,7 @@ there are no CI badges or implied remote workflow results yet. An original minim
 local catalogue API in Phase 3 will support deterministic API gates. Hosted smoke
 will remain a separate, explicitly failing external check.
 
-The dependency audit currently reports **19 moderate findings**, all propagating
+The last recorded dependency audit reported **19 moderate findings**, all propagating
 from one `sprintf-js` denial-of-service advisory in Jest's legacy configuration
 dependency chain. No high/critical findings were reported. The published audit fix
 requires an incompatible Jest downgrade. See [dependency risks](docs/DEPENDENCIES.md).
@@ -131,7 +156,8 @@ complete Toolshop regression suite, browser matrix, performance profile or CI re
 Toolshop is a shared public environment with mutable catalogue data. Search smoke
 expects at least one product whose name contains `pliers`; a catalogue policy change
 can legitimately require updating that business expectation. Only Chromium is
-installed/tested. BDD and the broader pattern catalogue remain future milestones.
+installed/tested. API/data patterns, BDD and the remaining roadmap phases are future
+milestones; Phase 2 does not claim broad parallel reliability verification.
 
 ## Continue the project
 
@@ -139,7 +165,8 @@ Read [PROGRESS](docs/PROGRESS.md), [ROADMAP](docs/ROADMAP.md),
 [ARCHITECTURE](docs/ARCHITECTURE.md), [PATTERNS](docs/PATTERNS.md),
 [DECISIONS](docs/DECISIONS.md) and [TEST_STRATEGY](docs/TEST_STRATEGY.md), then inspect
 the code and Git state. Resume the next incomplete task. The
-[foundation plan](docs/IMPLEMENTATION_PLAN.md) preserves this milestone's decisions.
+[foundation plan](docs/IMPLEMENTATION_PLAN.md) and [Phase 2 plan](docs/PHASE_2_PLAN.md)
+preserve the implemented milestones' decisions. Phase 3 requires a new user request.
 Keep changes small, run relevant checks, and update the checkpoint after milestones.
 
 This project contains original automation only. Toolshop source, images, seed content
