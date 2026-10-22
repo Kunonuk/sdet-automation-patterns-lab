@@ -5,7 +5,7 @@ Updated: 2026-10-21 (America/Edmonton).
 ## Current phase
 
 Phase 0 — COMPLETED. Phase 1 — COMPLETED (implementation and verification).
-The foundation is proposed on `feat/foundation` for PR review; it is not merged.
+The foundation is proposed on `feat/foundation` in [PR #1](https://github.com/Kunonuk/sdet-automation-patterns-lab/pull/1); it is open and not merged.
 Phases 2–8 are NOT_STARTED.
 
 ## Completed work
