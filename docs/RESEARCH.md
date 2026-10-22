@@ -27,37 +27,25 @@ Candidate later workflows: filter by a discovered category; sort a returned resu
 set; validate login fields; reject anonymous account access; add/remove an owned cart
 item; isolate factory data locally. Verify the live DOM/contract again before each.
 
-Headless Chromium inspection observed `data-test` controls `search-query`,
-`search-submit`, `search-reset`, `sort`, dynamic category/brand checkboxes and
-`nav-sign-in`. Product cards contain `product-name` and `product-price`; their
-current links lead to `/product/{id}`. The detail heading uses `product-name`.
-Login renders `email`, `password` and `login-submit` controls; no credentials
-were entered. Anonymous GET `/users/me` returned `401` with an Unauthorized message.
-
-The browser actually sends `QUERY /products/search` with JSON `{ "q": "pliers" }`
-and receives `200`. An initial inspection waiting for a GET-style `q` parameter
-timed out; network instrumentation revealed the different operation. The final
-UI smoke matches the observed method/path and checks the submitted JSON criteria.
-
 ## Technology selection
 
 Registry `latest` metadata and selected versions' engine/peer fields were fetched
 before installation. These are observations, not perpetual latest-version claims.
 
-| Package                      | Selected / researched stable version | Compatibility                                              |
-| ---------------------------- | ------------------------------------ | ---------------------------------------------------------- |
-| Node                         | Installed 24.16.0, LTS major 24      | Meets selected engines; runtime major recorded in `.nvmrc` |
-| TypeScript                   | 6.0.3                                | Latest 7.0.2 exceeds ESLint parser's `<6.1.0` peer bound   |
-| Playwright Test              | 1.64.1                               | Node >=20                                                  |
-| Jest / globals               | 30.5.2                               | Node 24 supported                                          |
-| Node types                   | 24.19.2                              | Match runtime major                                        |
-| ESLint / @eslint/js          | 10.13.0 / 10.0.1                     | Node >=24 supported; JS config requires ESLint 10          |
-| typescript-eslint            | 8.72.0                               | ESLint 8/9/10; TypeScript >=4.8.4 <6.1.0                   |
-| Prettier                     | 3.9.10                               | Node >=14                                                  |
-| allure-playwright            | 3.14.0                               | Playwright >=1.62.0                                        |
-| Allure Node CLI              | 3.21.0                               | Install/execute to confirm complete runtime compatibility  |
-| Cucumber.js (deferred)       | 13.3.0                               | Node 22, 24 or >=26                                        |
-| allure-cucumberjs (deferred) | 3.14.0                               | Cucumber >=10.8.0                                          |
+| Package | Selected / researched stable version | Compatibility |
+| --- | --- | --- |
+| Node | Installed 24.16.0, LTS major 24 | Meets selected engines; runtime major recorded in `.nvmrc` |
+| TypeScript | 6.0.3 | Latest 7.0.2 exceeds ESLint parser's `<6.1.0` peer bound |
+| Playwright Test | 1.64.1 | Node >=20 |
+| Jest / globals | 30.5.2 | Node 24 supported |
+| Node types | 24.19.2 | Match runtime major |
+| ESLint / @eslint/js | 10.13.0 / 10.0.1 | Node >=24 supported; JS config requires ESLint 10 |
+| typescript-eslint | 8.72.0 | ESLint 8/9/10; TypeScript >=4.8.4 <6.1.0 |
+| Prettier | 3.9.10 | Node >=14 |
+| allure-playwright | 3.14.0 | Playwright >=1.62.0 |
+| Allure Node CLI | 3.21.0 | Install/execute to confirm complete runtime compatibility |
+| Cucumber.js (deferred) | 13.3.0 | Node 22, 24 or >=26 |
+| allure-cucumberjs (deferred) | 3.14.0 | Cucumber >=10.8.0 |
 
 Sources: [Node release schedule](https://github.com/nodejs/Release),
 [Playwright installation](https://playwright.dev/docs/intro),

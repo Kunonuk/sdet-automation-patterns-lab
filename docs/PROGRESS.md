@@ -4,71 +4,34 @@ Updated: 2026-10-21 (America/Edmonton).
 
 ## Current phase
 
-Phase 0 — COMPLETED. Phase 1 — COMPLETED. First verified milestone delivered;
-execution stopped at the requested boundary. Phases 2–8 are NOT_STARTED.
+Phase 0 — IN_PROGRESS. First execution is limited to Phases 0–1.
 
 ## Completed work
 
-- Public repository confirmed public. Planning commit `7797428` and verified
-  foundation commit `c19ad78` pushed to `main`:
-  https://github.com/Kunonuk/sdet-automation-patterns-lab.
-- Toolshop v5 UI, OpenAPI, catalogue/search/categories and anonymous profile behavior
-  researched; upstream license reviewed. Original automation only, no accounts created.
-- Exact compatible npm dependencies and lockfile, strict TypeScript, Playwright UI/API
-  projects, compiled Jest unit tests, ESLint, Prettier and native `.env` loading.
-- Pure injected configuration with 22 meaningful unit cases; independent callers,
-  defaults, path prefixes, malformed/credential-bearing URLs and secret-safe errors.
-- Three real API scenarios and one real headless UI search/detail workflow passed.
-- HTML/JSON/Allure reporting; generated Allure dashboard visually inspected headlessly.
-  Per-run cleanup removes discovery leftovers; report contains four executed passes.
-- Independent read-only review found no critical/important defects. Its empty query/
-  fragment delimiter finding was reproduced (4 failures, 18 passes) and fixed (22 passes).
-- Permanent independent checkout: `/Users/admin/AquaProjects/sdet-automation-patterns-lab`.
-- Final LockThreat verification: clean `LGH-5031`; unstaged and staged diffs empty.
-- Final local source commit matches the GitHub main commit; checkpoint-only changes
-  follow it in Git history.
+- Read the full user brief and preserved scope in roadmap/design/strategy.
+- Checked the original workspace: clean `LGH-5031`; no changes to LockThreat intended.
+- Existing GitHub identity `Kunonuk` authenticated successfully outside sandbox network restrictions.
+- Toolshop OpenAPI v5.0.0, catalogue/search/categories GET requests verified.
+- Upstream license restrictions reviewed; original automation only.
+- Stable package engine/peer compatibility inspected; TypeScript 6.0.3 selected.
 
 ## Last successful verification
 
-| Command / inspection                                   | Observed result                                                                        |
-| ------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| `npm ci --cache /private/tmp/sdet-npm-cache --no-fund` | Clean locked install; 521 packages added, 522 audited.                                 |
-| `npm run verify`                                       | Typecheck, zero-warning lint, format and 22 Jest tests passed.                         |
-| `env -u PWDEBUG -u HEADED npm run test:external`       | 4 passed: 3 API, 1 UI; 0 failed/skipped/flaky/retries; one worker; 8.3s.               |
-| `npm run report:allure`                                | Static report generated; statistic exactly `total: 4, passed: 4`.                      |
-| Disposable local headless report probe                 | Dashboard rendered 100%, total 4, passed 4; zero page exceptions; screenshot reviewed. |
-
-Ignored artifacts: `test-results/results.json`, `test-results/allure-preview.png`,
-`playwright-report/index.html`, `allure-results/`, `allure-report/index.html`.
-The disposable probe is validation evidence, not part of the tracked test suite.
+Research only. No project tests have been executed yet. Do not infer a passing suite.
 
 ## Known failures / environment observations
 
-- Sandboxed shell DNS cannot reach external hosts. Network-enabled execution works;
-  the initial authentication error disappeared without changing credentials.
-- Initial SSH push was denied to an unrelated `dmytro-cl` identity; the existing
-  `Kunonuk` HTTPS credential helper pushed successfully. No global auth/Git changes.
-  Commits use the authenticated account's public noreply address.
-- `npm audit`: 19 moderate findings from one Jest transitive `sprintf-js` advisory;
-  zero high/critical. Deprecated transitive glob notice remains. See DEPENDENCIES.
-- Initial UI inspection timed out waiting for GET parameters. Instrumentation showed
-  QUERY with a JSON body; the final scenario observes that operation and passes.
-- Discovery left four skipped Allure entries. Per-run cleanup resolved this;
-  the regenerated report has exactly four passed executions.
-- First visual report probe looked for a name inside a collapsed suite and timed out;
-  the corrected dashboard probe passed. Allure 3.21.0 requests optional
-  `widgets/metrics.json` although it was not emitted, producing a 404 console message.
-  Rendering succeeds with zero page exceptions. No dependency was patched.
-- Missing optional `.env` and inherited NO_COLOR/FORCE_COLOR produce informational
-  Playwright messages. No effect on results. Java is absent; Allure 3 does not need it.
-- Failure-only screenshot/trace configuration exists; deliberate fault-injection
-  verification remains deferred. CI, Cucumber, additional browsers and later patterns
-  have not been executed or implemented.
+- Sandboxed shell DNS cannot reach external hosts; network-enabled execution is required here.
+- Initial sandboxed `gh auth status` incorrectly appeared unauthenticated; network-enabled
+  `gh auth status` and `gh api user` succeeded. No authentication changes were made.
+- Java is absent; the chosen Node-native Allure 3 CLI avoids that prerequisite.
 
 ## Remaining work and next action
 
-No work remains in the first-execution scope. Phase 2 is next: extract focused catalogue/detail pages, reusable components and typed
-fixtures from the working flow. Do not implement all remaining phases together.
+Follow `IMPLEMENTATION_PLAN.md`: finish UI inspection, publish Phase 0 docs,
+install compatible locked dependencies, execute red/green configuration tests,
+implement and run real UI/API smoke, generate reporting, update this checkpoint,
+commit/push and verify remote state. Then stop; Phase 2 is the next session's scope.
 
-On continuation, read this file, ROADMAP, ARCHITECTURE, DECISIONS, PATTERNS and
-TEST_STRATEGY, then inspect actual code/Git/test state. Resume; do not recreate work.
+Read this file, ROADMAP, ARCHITECTURE, DECISIONS, PATTERNS and TEST_STRATEGY before
+continuation. Inspect actual Git/code/test state; never recreate a completed component.
